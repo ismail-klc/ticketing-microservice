@@ -5,9 +5,13 @@ import cookieSession from 'cookie-session';
 import dotenv from 'dotenv';
 import cors from 'cors';
 dotenv.config({ path: '../.env' });
-import { errorHandler, NotFoundError } from '@isotickets/common';
+import { errorHandler, NotFoundError, currentUser } from '@isotickets/common';
 
 // imports
+import { createTicketRouter } from './routes/new';
+import { showTicketRouter } from './routes/show';
+import { indexTicketRouter } from './routes/index';
+import { updateTicketRouter } from './routes/update';
 
 const app = express();
 app.set('trust proxy', true);
@@ -27,6 +31,7 @@ const corsOptions = {
     optionSuccessStatus: 200
 }
 app.use(cors(corsOptions));
+app.use(currentUser);
 
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "http://localhost:5000");
@@ -34,9 +39,11 @@ app.use(function (req, res, next) {
     next();
 });
 
-
 // use routes
-
+app.use(createTicketRouter);
+app.use(showTicketRouter);
+app.use(indexTicketRouter);
+app.use(updateTicketRouter);
 
 app.all('*', async () => {
     throw new NotFoundError();
