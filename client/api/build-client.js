@@ -6,7 +6,7 @@ const buildClient = (props) => {
         // we are on the server
 
         return axios.create({
-            baseURL: 'http://localhost:3000',
+            baseURL: 'http://localhost:8080',
             headers: props.req.headers,
             withCredentials: true
         });
@@ -15,7 +15,7 @@ const buildClient = (props) => {
     console.log('browser');
     // we must be on the browser
     return axios.create({
-        baseURL: 'http://localhost:3000',
+        baseURL: 'http://localhost:8080',
         // headers: req.headers,
         withCredentials: true
     });
