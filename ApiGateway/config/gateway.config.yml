@@ -10,11 +10,16 @@ apiEndpoints:
   api-tickets:
     host: localhost
     paths: ['/api/tickets/*','/api/tickets'] 
+  api-orders:
+    host: localhost
+    paths: ['/api/orders/*','/api/orders'] 
 serviceEndpoints:
   users:
     url: 'http://localhost:3000'
   tickets:
     url: 'http://localhost:3001'
+  orders:
+    url: 'http://localhost:3002'
 policies:
   - basic-auth
   - cors
@@ -40,4 +45,12 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: tickets 
+              changeOrigin: true
+  pipelines-orders:
+    apiEndpoints:
+      - api-orders
+    policies:
+      - proxy:
+          - action:
+              serviceEndpoint: orders 
               changeOrigin: true
