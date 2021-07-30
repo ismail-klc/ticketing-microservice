@@ -3,6 +3,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../models/ticket';
 import { Order, OrderStatus } from '../../models/order';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('marks an order as cancelled', async () => {
     // create a ticket with Ticket Model
@@ -34,7 +35,7 @@ it('marks an order as cancelled', async () => {
     expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
 
-it('emits a order cancelled event', async () => {
+it('emits an order cancelled event', async () => {
     const ticket = Ticket.build({
         id: mongoose.Types.ObjectId().toHexString(),
         title: 'concert',
@@ -56,4 +57,7 @@ it('emits a order cancelled event', async () => {
         .set('Cookie', user)
         .send()
         .expect(204);
+
+    expect(natsWrapper.client.publish).toHaveBeenCalled();
+
 });
